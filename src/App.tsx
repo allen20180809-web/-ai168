@@ -7,32 +7,54 @@ import MessageBoard from './pages/MessageBoard';
 import Contact from './pages/Contact';
 import About from './pages/About';
 import ArticleDetail from './pages/ArticleDetail';
+import AdminLayout from './pages/admin/AdminLayout';
+import Dashboard from './pages/admin/Dashboard';
+import ArticleManager from './pages/admin/ArticleManager';
+import CommentManager from './pages/admin/CommentManager';
+import ActivityManager from './pages/admin/ActivityManager';
+import SiteSettings from './pages/admin/SiteSettings';
 
 export default function App() {
   return (
     <Router>
-      <div className="min-h-screen flex flex-col selection:bg-primary-container selection:text-white">
-        <Header />
-        <div className="flex-1">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/messages" element={<MessageBoard />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/article/:id" element={<ArticleDetail />} />
-          </Routes>
-        </div>
-        <Footer />
-        
-        {/* Floating Action Button */}
-        <button className="fixed bottom-8 right-8 w-16 h-16 rounded-full bg-primary text-white shadow-2xl flex items-center justify-center group hover:w-48 transition-all duration-300 overflow-hidden z-40 cursor-pointer">
-          <span className="material-symbols-outlined absolute left-5 group-hover:left-6 transition-all">edit_note</span>
-          <span className="ml-8 font-bold text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap font-headline">
-            提交草稿
-          </span>
-        </button>
-      </div>
+      <Routes>
+        {/* Admin Routes — 独立布局，不使用 Header/Footer */}
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<Dashboard />} />
+          <Route path="articles" element={<ArticleManager />} />
+          <Route path="comments" element={<CommentManager />} />
+          <Route path="activities" element={<ActivityManager />} />
+          <Route path="settings" element={<SiteSettings />} />
+        </Route>
+
+        {/* Public Routes — 前台布局 */}
+        <Route
+          path="*"
+          element={
+            <div className="min-h-screen flex flex-col selection:bg-primary-container selection:text-white">
+              <Header />
+              <div className="flex-1">
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/messages" element={<MessageBoard />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/article/:id" element={<ArticleDetail />} />
+                </Routes>
+              </div>
+              <Footer />
+              
+              {/* Floating Action Button */}
+              <button className="fixed bottom-8 right-8 w-16 h-16 rounded-full bg-primary text-white shadow-2xl flex items-center justify-center group hover:w-48 transition-all duration-300 overflow-hidden z-40 cursor-pointer">
+                <span className="material-symbols-outlined absolute left-5 group-hover:left-6 transition-all">edit_note</span>
+                <span className="ml-8 font-bold text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap font-headline">
+                  提交草稿
+                </span>
+              </button>
+            </div>
+          }
+        />
+      </Routes>
     </Router>
   );
 }
-
